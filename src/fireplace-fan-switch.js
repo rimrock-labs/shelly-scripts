@@ -2,6 +2,10 @@
 A Shelly Plus 1PM script for monitoring the power usage of a gas fireplace and then toggling a separate Shelly Plus 1 switch that controls an overhead fan (on or off) to push hot air down.
 This script relies on several KVS values being set in your shelly.
 You can set them in KVS or populate them directly in the context below.
+
+This script also uses the Shelly Cloud to discover the IP of the other switch.
+You will need to use the Shelly Cloud to generate and store the auth key to perform this.
+Otherwise hardcode the ip of the switch on your local network.
 */
 
 let context = {
