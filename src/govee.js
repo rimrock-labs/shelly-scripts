@@ -1,9 +1,6 @@
 /**
  * Govee H5075 Temperature + Humidity BLE Sensor
  * Methods for polling and parsing data from the sensor.
- *
- * Based on the discussion here,
- * https://community.home-assistant.io/t/read-govee-temperature-humidity-ble-advertisements-with-esp32-and-esphome/230449/11
  */
 let Govee = {
   H5075: {
@@ -29,8 +26,18 @@ let Govee = {
         });
     },
     parse: function (data) {
-      let basenum = (data.at(1) << 16) + (data.at(2) << 8) + data.at(3);
-      let temp = basenum / 10000.0;
+      var basenum = (data.at(1) << 16) + (data.at(2) << 8) + data.at(3);
+      let tempIsNegative = false;
+      if (basenum & 0x800000) {
+        tempIsNegative = true;
+        basenum = basenum ^ 0x800000;
+      }
+
+      var temp = basenum / 10000.0;
+      if (tempIsNegative) {
+        temp = 0 - temp;
+      }
+
       return {
         timestamp: Date.now(),
         temp_c: temp,
